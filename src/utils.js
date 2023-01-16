@@ -54,7 +54,8 @@ function getSummary(stats) {
 }
 
 function pullRequestId() {
-  const pullRequestId = github.context.issue.number
+  const pullRequestId = core.getInput('pr', {required: false}) ||
+        github.context.issue.number
   if (!pullRequestId) {
     throw new Error('Cannot find the pull request ID.')
   }

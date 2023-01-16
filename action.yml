@@ -18,6 +18,10 @@ inputs:
     description: 'Should it be shown always or it should be deleted when there are no failures'
     required: false
     default: true
+  pr:
+    description: 'The PR number. If not specified, will try to use `github.context.issue.number`.'
+    required: false
+    default: null
 runs:
   using: 'node12'
   main: 'dist/index.js'
