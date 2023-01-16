@@ -10401,7 +10401,6 @@ function getSummary(stats) {
 function pullRequestId() {
   const pullRequestId = core.getInput('pr', {required: false}) ||
         github.context.issue.number
-  console.log(`Yop, this is pr value received: ${core.getInput('pr', {required: false})}`)
   if (!pullRequestId) {
     throw new Error(`Cannot find the pull request ID. (got: ${pullRequestId})`)
   }
@@ -10442,7 +10441,7 @@ ${getTable(getExamples(result.results))}
 </details>
 `
   } else {
-    message += getSummary(result.stats)
+    message +=  "\n\n" + getSummary(result.stats)
   }
   await replaceComment({
     ...commentGeneralOptions(),
