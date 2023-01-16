@@ -56,8 +56,9 @@ function getSummary(stats) {
 function pullRequestId() {
   const pullRequestId = core.getInput('pr', {required: false}) ||
         github.context.issue.number
+  console.log(`Yop, this is pr value received: ${core.getInput('pr', {required: false})}`)
   if (!pullRequestId) {
-    throw new Error('Cannot find the pull request ID.')
+    throw new Error(`Cannot find the pull request ID. (got: ${pullRequestId})`)
   }
   return pullRequestId
 }
@@ -84,9 +85,10 @@ async function report(result) {
     return
   }
 
-  await replaceComment({
-    ...commentGeneralOptions(),
-    body: `${title}
+  const { failures, pending, skipped, other } = result.stats
+  let message = title;
+  if (failures + pending + skipped + other != 0) {
+    message += `
 <details>
 <summary>${getSummary(result.stats)}</summary>
 
@@ -94,6 +96,12 @@ ${getTable(getExamples(result.results))}
 
 </details>
 `
+  } else {
+    message += getSummary(result.stats)
+  }
+  await replaceComment({
+    ...commentGeneralOptions(),
+    body: message
   })
 }
 
